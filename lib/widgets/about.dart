@@ -19,7 +19,7 @@ class About extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos exercitationem ut cupiditate...',
+            'This is a house with w take breathing view, you can have a barbecue party with your family or friends...',
             style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   fontSize: 14,
                 ),

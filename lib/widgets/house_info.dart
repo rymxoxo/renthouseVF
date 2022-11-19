@@ -27,11 +27,11 @@ class HouseInfo extends StatelessWidget {
             children: const [
               _MenuInfo(
                 imageUrl: 'assets/icons/kitchen.svg',
-                content: '2 Kitchen\n120 sqft',
+                content: '2 Kitchen\n',
               ),
               _MenuInfo(
                 imageUrl: 'assets/icons/parking.svg',
-                content: '5 Parking\n120 sqft',
+                content: '5 Parking\n',
               ),
             ],
           )

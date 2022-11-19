@@ -5,9 +5,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final bottomBarItems = [
     'home',
     'home_search',
-    'notification',
+    'home_mark',
+    'user-svgrepo-com',
     'chat',
-    'home_mark'
   ];
 
   CustomBottomNavigationBar({Key? key}) : super(key: key);

@@ -7,19 +7,15 @@ class House {
 
   static List<House> generateRecommended() {
     return [
-      House('The Moon House', 'P455, Chhatak, Sylhet',
-          'assets/images/house01.jpeg'),
-      House('The Moon House', 'P455, Chhatak, Sylhet',
-          'assets/images/house02.jpeg'),
+      House('Appartment Marsa', 'Route Marsa', 'assets/images/house01.jpeg'),
+      House('Gammarth Villa', 'Route Gammarth', 'assets/images/house02.jpeg'),
     ];
   }
 
   static List<House> generateBestOffer() {
     return [
-      House('The Moon House', 'P455, Chhatak, Sylhet',
-          'assets/images/offer01.jpeg'),
-      House('The Moon House', 'P455, Chhatak, Sylhet',
-          'assets/images/offer02.jpeg'),
+      House('Appartment Marsa', '1500dt/month', 'assets/images/offer01.jpeg'),
+      House('Gammarth Villa', '1000dt/month', 'assets/images/offer02.jpeg'),
     ];
   }
 }
