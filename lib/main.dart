@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:house_rent/screens/home/home.dart';
+import 'package:house_rent/screens/registration/sign_in.dart';
+import 'package:house_rent/screens/registration/sign_up.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,6 +13,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('building');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -28,7 +31,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const Home(),
+      home: const SignIn(),
     );
   }
 }
