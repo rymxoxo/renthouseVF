@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:house_rent/widgets/custom_bottom_navigation_bar.dart';
@@ -8,6 +10,8 @@ import 'package:house_rent/widgets/welcome_text.dart';
 import 'package:house_rent/widgets/categories.dart';
 import 'package:house_rent/widgets/best_offer.dart';
 
+import '../../firebase_options.dart';
+
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -16,18 +20,37 @@ class Home extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: const CustomAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const WelcomeText(),
-            const SearchInput(),
-            const Categories(),
-            RecommendedHouse(),
-            BestOffer(),
-          ],
-        ),
-      ),
+      body: FutureBuilder(
+          future: Firebase.initializeApp(
+            options: DefaultFirebaseOptions.currentPlatform,
+          ),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                final user = FirebaseAuth.instance.currentUser;
+
+                if (user?.emailVerified ?? false) {
+                  //u need to put bol in if statement so il first is true then take false
+                  print('the user is verified');
+                } else {
+                  print("you need to verify your email first");
+                }
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const WelcomeText(),
+                      const SearchInput(),
+                      const Categories(),
+                      RecommendedHouse(),
+                      BestOffer(),
+                    ],
+                  ),
+                );
+              default:
+                return const Text('Loading ...');
+            }
+          }),
       bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
