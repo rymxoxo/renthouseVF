@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:house_rent/screens/registration/verify_email.dart';
 
 import 'package:house_rent/widgets/custom_bottom_navigation_bar.dart';
 import 'package:house_rent/widgets/recommended_house.dart';
@@ -28,12 +29,13 @@ class Home extends StatelessWidget {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
                 final user = FirebaseAuth.instance.currentUser;
-
-                if (user?.emailVerified ?? false) {
-                  //u need to put bol in if statement so il first is true then take false
-                  print('the user is verified');
+                if (user != null) {
+                  if (user?.emailVerified ?? false) {
+                    //u need to put bol in if statement so il first is true then take false
+                    print('the user is verified');
+                  }
                 } else {
-                  print("you need to verify your email first");
+                  return const VerifyEmail();
                 }
                 return SingleChildScrollView(
                   child: Column(
@@ -48,7 +50,7 @@ class Home extends StatelessWidget {
                   ),
                 );
               default:
-                return const Text('Loading ...');
+                return const CircularProgressIndicator();
             }
           }),
       bottomNavigationBar: CustomBottomNavigationBar(),

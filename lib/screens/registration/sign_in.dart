@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:house_rent/screens/home/home.dart';
 
 import '../../firebase_options.dart';
 
@@ -79,6 +80,8 @@ class _SignInState extends State<SignIn> {
                           print('done');
 
                           print(UserCredential);
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/home/', (route) => false);
                         } on FirebaseAuthException catch (e) {
                           print(e.code);
                           if (e.code == 'user-not-found') {
@@ -89,6 +92,12 @@ class _SignInState extends State<SignIn> {
                         }
                       },
                       child: const Text('Log In')),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/register/', (route) => false);
+                      },
+                      child: Text('No registered yet? Register here !'))
                 ],
               );
             default:
