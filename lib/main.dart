@@ -4,6 +4,11 @@ import 'package:house_rent/screens/home/home.dart';
 import 'package:house_rent/screens/registration/sign_in.dart';
 import 'package:house_rent/screens/registration/sign_up.dart';
 import 'package:house_rent/screens/registration/verify_email.dart';
+import 'package:house_rent/widgets/custom_app_bar.dart';
+import 'dart:developer' as devtools show log;
+//we used show because developer package gives yu alot of another function
+//Since we want only log to be shown we used show
+//we have puted the alias because we can have a function named devtools
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     print('building');
     return MaterialApp(
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         backgroundColor: const Color(0xFFF5F6F6),
         primaryColor: const Color(0xFF811B83),

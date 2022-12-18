@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:house_rent/screens/home/home.dart';
+import 'dart:developer' as devtools show log;
 
 import '../../firebase_options.dart';
 
@@ -94,6 +95,8 @@ class _SignInState extends State<SignIn> {
                       child: const Text('Log In')),
                   TextButton(
                       onPressed: () {
+                        devtools.log('tesssst');
+
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             '/register/', (route) => false);
                       },
