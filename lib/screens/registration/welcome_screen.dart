@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:developer' as devtools show log;
 
 class Welcome extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
@@ -109,8 +110,8 @@ class Welcome extends StatelessWidget {
             child: ElevatedButton(
               child: const Text('Login'),
               onPressed: () {
-                print(nameController.text);
-                print(passwordController.text);
+                devtools.log(nameController.text);
+                devtools.log(passwordController.text);
               },
             )),
         Row(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:house_rent/constants/routes.dart';
 
 import 'package:house_rent/screens/home/home.dart';
 import 'package:house_rent/screens/registration/sign_in.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('building');
+    devtools.log('building');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -39,10 +40,10 @@ class MyApp extends StatelessWidget {
       ),
       home: const SignIn(),
       routes: {
-        '/home/': (context) => const Home(),
-        '/login/': (context) => const SignIn(),
-        '/register/': (context) => const SignUp(),
-        '/verifyemail': (context) => const VerifyEmail()
+        homeRoute: (context) => const Home(),
+        loginRoute: (context) => const SignIn(),
+        registerRoute: (context) => const SignUp(),
+        verifyEmailRoute: (context) => const VerifyEmail()
       },
     );
   }

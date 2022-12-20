@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:house_rent/constants/routes.dart';
 import 'package:house_rent/screens/home/home.dart';
 import 'dart:developer' as devtools show log;
 
@@ -78,17 +79,19 @@ class _SignInState extends State<SignIn> {
                               .signInWithEmailAndPassword(
                                   email: email, password: password);
 
-                          print('done');
-
-                          print(UserCredential);
+                          devtools.log('done');
+                          devtools.log(UserCredential.toString());
                           Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/home/', (route) => false);
+                            homeRoute,
+                            (route) => false,
+                          );
                         } on FirebaseAuthException catch (e) {
-                          print(e.code);
+                          devtools.log(e.code);
                           if (e.code == 'user-not-found') {
-                            print('No user found for that email.');
+                            devtools.log('No user found for that email.');
                           } else if (e.code == 'wrong-password') {
-                            print('Wrong password provided for that user.');
+                            devtools
+                                .log('Wrong password provided for that user.');
                           }
                         }
                       },
@@ -98,7 +101,9 @@ class _SignInState extends State<SignIn> {
                         devtools.log('tesssst');
 
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/register/', (route) => false);
+                          registerRoute,
+                          (route) => false,
+                        );
                       },
                       child: Text('No registered yet? Register here !'))
                 ],

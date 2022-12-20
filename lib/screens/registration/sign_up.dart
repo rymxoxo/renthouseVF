@@ -2,8 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:house_rent/constants/routes.dart';
 
 import '../../firebase_options.dart';
+import 'dart:developer' as devtools show log;
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -74,11 +76,12 @@ class _SignUpState extends State<SignUp> {
                           print(UserCredential);
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'weak-password') {
-                            print('The password provided is too weak.');
+                            devtools.log('The password provided is too weak.');
                           } else if (e.code == 'email-already-in-use') {
-                            print('The account already exists for that email.');
+                            devtools.log(
+                                'The account already exists for that email.');
                           } else if (e.code == 'invalid-email') {
-                            print('invalid email entered');
+                            devtools.log('invalid email entered');
                           }
                         }
                       },
@@ -86,7 +89,9 @@ class _SignUpState extends State<SignUp> {
                   TextButton(
                       onPressed: (() {
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/login/', (route) => false);
+                          loginRoute,
+                          (route) => false,
+                        );
                       }),
                       child: const Text('Already Registered ? Login here!'))
                 ],

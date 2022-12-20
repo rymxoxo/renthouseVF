@@ -12,6 +12,8 @@ import 'package:house_rent/widgets/categories.dart';
 import 'package:house_rent/widgets/best_offer.dart';
 
 import '../../firebase_options.dart';
+import 'dart:developer' as devtools show log;
+import 'dart:developer' as devtools show log;
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -32,7 +34,7 @@ class Home extends StatelessWidget {
                 if (user != null) {
                   if (user?.emailVerified ?? false) {
                     //u need to put bol in if statement so il first is true then take false
-                    print('the user is verified');
+                    devtools.log('the user is verified');
                   }
                 } else {
                   return const VerifyEmail();
