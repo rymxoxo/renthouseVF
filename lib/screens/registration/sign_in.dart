@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:house_rent/constants/routes.dart';
 import 'package:house_rent/screens/home/home.dart';
+import 'package:house_rent/utilities/show_error_dialog.dart';
 import 'dart:developer' as devtools show log;
 
 import '../../firebase_options.dart';
@@ -85,20 +86,41 @@ class _SignInState extends State<SignIn> {
                             homeRoute,
                             (route) => false,
                           );
+                          //handling firebase exception
                         } on FirebaseAuthException catch (e) {
                           devtools.log(e.code);
                           if (e.code == 'user-not-found') {
+                            showErrorDialog(
+                              context,
+                              'User not found',
+                            );
                             devtools.log('No user found for that email.');
                           } else if (e.code == 'wrong-password') {
+                            showErrorDialog(
+                              context,
+                              'Wrong Password',
+                            );
                             devtools
                                 .log('Wrong password provided for that user.');
+                          } else {
+                            showErrorDialog(
+                              context,
+                              'Error : ${e.code}',
+                            );
                           }
+                        }
+                        //handling other exception ( if not the firebase exception) then go into this catch block
+                        catch (e) {
+                          showErrorDialog(
+                            context,
+                            e.toString(),
+                          );
                         }
                       },
                       child: const Text('Log In')),
                   TextButton(
                       onPressed: () {
-                        devtools.log('tesssst');
+                        devtools.log('Login button is pressed');
 
                         Navigator.of(context).pushNamedAndRemoveUntil(
                           registerRoute,
