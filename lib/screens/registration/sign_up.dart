@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:house_rent/constants/routes.dart';
+import 'package:house_rent/utilities/show_error_dialog.dart';
 
 import '../../firebase_options.dart';
 import 'dart:developer' as devtools show log;
@@ -81,12 +82,29 @@ class _SignUpState extends State<SignUp> {
                           print(UserCredential);
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'weak-password') {
+                            await showErrorDialog(
+                              context,
+                              'Weak Password',
+                            );
                             devtools.log('The password provided is too weak.');
                           } else if (e.code == 'email-already-in-use') {
+                            await showErrorDialog(
+                              context,
+                              'Email is already in use',
+                            );
                             devtools.log(
                                 'The account already exists for that email.');
                           } else if (e.code == 'invalid-email') {
+                            await showErrorDialog(
+                              context,
+                              'Invalid email',
+                            );
                             devtools.log('invalid email entered');
+                          } else {
+                            await showErrorDialog(
+                              context,
+                              'Error ${e.code}',
+                            );
                           }
                         }
                       },
