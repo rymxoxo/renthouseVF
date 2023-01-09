@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:house_rent/constants/routes.dart';
 import 'package:house_rent/screens/home/home.dart';
+import 'package:house_rent/screens/registration/verify_email.dart';
 import 'package:house_rent/utilities/show_error_dialog.dart';
 import 'dart:developer' as devtools show log;
 
@@ -82,10 +83,21 @@ class _SignInState extends State<SignIn> {
 
                           devtools.log('done');
                           devtools.log(UserCredential.toString());
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                            homeRoute,
-                            (route) => false,
-                          );
+                          final user = FirebaseAuth.instance.currentUser;
+                          if (user?.emailVerified ?? false) {
+                            //user is verified
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                              homeRoute,
+                              (route) => false,
+                            );
+                          } else {
+                            //users's email is NOT verifed
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                              verifyEmailRoute,
+                              (route) => false,
+                            );
+                          }
+
                           //handling firebase exception
                         } on FirebaseAuthException catch (e) {
                           devtools.log(e.code);

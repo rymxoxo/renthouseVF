@@ -72,7 +72,12 @@ class _SignUpState extends State<SignUp> {
                         try {
                           final UserCredential = await FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
-                                  email: email, password: password);
+                            email: email,
+                            password: password,
+                          );
+                          final user = FirebaseAuth.instance.currentUser;
+                          await user?.sendEmailVerification();
+                          Navigator.of(context).pushNamed(verifyEmailRoute);
                           print(UserCredential);
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'weak-password') {
@@ -88,6 +93,7 @@ class _SignUpState extends State<SignUp> {
                       child: const Text('Register')),
                   TextButton(
                       onPressed: (() {
+                        devtools.log('register button is pressed');
                         Navigator.of(context).pushNamedAndRemoveUntil(
                           loginRoute,
                           (route) => false,
