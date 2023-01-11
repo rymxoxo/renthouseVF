@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:house_rent/constants/routes.dart';
+import 'package:house_rent/services/auth/auth_exception.dart';
+import 'package:house_rent/services/auth/auth_service.dart';
 import 'package:house_rent/utilities/show_error_dialog.dart';
 
 import '../../firebase_options.dart';
@@ -41,9 +41,7 @@ class _SignUpState extends State<SignUp> {
         title: const Text('Register'),
       ),
       body: FutureBuilder(
-        future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
-        ),
+        future: AuthService.firebase().initialize(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
@@ -71,41 +69,43 @@ class _SignUpState extends State<SignUp> {
                         final email = _email.text;
                         final password = _password.text;
                         try {
-                          final UserCredential = await FirebaseAuth.instance
-                              .createUserWithEmailAndPassword(
+                          await AuthService.firebase().createUser(
                             email: email,
                             password: password,
                           );
-                          final user = FirebaseAuth.instance.currentUser;
-                          await user?.sendEmailVerification();
+
+                          // final UserCredential = await FirebaseAuth.instance
+                          //     .createUserWithEmailAndPassword(
+                          //   email: email,
+                          //   password: password,
+                          // );
+                          AuthService.firebase().sendEmailVerification();
                           Navigator.of(context).pushNamed(verifyEmailRoute);
-                          print(UserCredential);
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == 'weak-password') {
-                            await showErrorDialog(
-                              context,
-                              'Weak Password',
-                            );
-                            devtools.log('The password provided is too weak.');
-                          } else if (e.code == 'email-already-in-use') {
-                            await showErrorDialog(
-                              context,
-                              'Email is already in use',
-                            );
-                            devtools.log(
-                                'The account already exists for that email.');
-                          } else if (e.code == 'invalid-email') {
-                            await showErrorDialog(
-                              context,
-                              'Invalid email',
-                            );
-                            devtools.log('invalid email entered');
-                          } else {
-                            await showErrorDialog(
-                              context,
-                              'Error ${e.code}',
-                            );
-                          }
+                          //print(UserCredential);
+                        } on WeakPasswordAuthException {
+                          await showErrorDialog(
+                            context,
+                            'Weak Password',
+                          );
+                          devtools.log('The password provided is too weak.');
+                        } on EmailAlreadyInUseAuthException {
+                          await showErrorDialog(
+                            context,
+                            'Email is already in use',
+                          );
+                          devtools.log(
+                              'The account already exists for that email.');
+                        } on InvalidEmailAuthException {
+                          await showErrorDialog(
+                            context,
+                            'Invalid email',
+                          );
+                          devtools.log('invalid email entered');
+                        } on GenericAuthException {
+                          await showErrorDialog(
+                            context,
+                            'Failed to register',
+                          );
                         }
                       },
                       child: const Text('Register')),

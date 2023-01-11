@@ -1,10 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:house_rent/services/auth/auth_provider.dart';
 import 'package:house_rent/services/auth/auth_user.dart';
+import 'package:house_rent/services/auth/firebase_auth_provider.dart';
+
+import '../../firebase_options.dart';
 
 class AuthService implements AuthProvider {
   final AuthProvider provider;
 
   AuthService(this.provider);
+  factory AuthService.firebase() => AuthService(
+        FirebaseAuthProvider(),
+      );
 
   @override
   Future<AuthUser> createUser({
@@ -31,11 +38,13 @@ class AuthService implements AuthProvider {
       );
 
   @override
-  Future<void> logOut() {
-    // TODO: implement logOut
-    throw UnimplementedError();
-  }
+  Future<void> logOut() => provider.logOut(); // TODO: implement logOut
 
   @override
   Future<void> sendEmailVerification() => provider.sendEmailVerification();
+
+  @override
+  Future<void> initialize() => provider.initialize();
+  // TODO: implement initialize
+
 }

@@ -1,9 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:house_rent/constants/routes.dart';
 import 'package:house_rent/screens/registration/sign_in.dart';
 import 'dart:developer' as devtools show log;
+
+import 'package:house_rent/services/auth/auth_service.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 final showLogout = await showLogOutDialog(context);
                 showLogOutDialog(context);
                 if (showLogout) {
-                  await FirebaseAuth.instance.signOut();
+                  AuthService.firebase().logOut();
                   Navigator.of(context).pushNamedAndRemoveUntil(
                     loginRoute,
                     (_) => false,

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:house_rent/screens/registration/verify_email.dart';
+import 'package:house_rent/services/auth/auth_service.dart';
 
 import 'package:house_rent/widgets/custom_bottom_navigation_bar.dart';
 import 'package:house_rent/widgets/recommended_house.dart';
@@ -24,12 +24,11 @@ class Home extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: const CustomAppBar(),
       body: FutureBuilder(
-          future: Firebase.initializeApp(
-            options: DefaultFirebaseOptions.currentPlatform,
-          ),
+          future: AuthService.firebase().initialize(),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
+                AuthService.firebase().currentUser;
                 final user = FirebaseAuth.instance.currentUser;
                 if (user != null) {
                   if (user?.emailVerified ?? false) {
