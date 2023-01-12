@@ -37,79 +37,121 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-      ),
       body: FutureBuilder(
         future: AuthService.firebase().initialize(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  TextField(
-                    controller: _email,
-                    keyboardType: TextInputType.emailAddress,
-                    obscureText: false,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration:
-                        const InputDecoration(hintText: 'Enter your Email'),
+                  Container(
+                    child: Image.asset(
+                      'assets/images/welcome.png',
+                      height: 250,
+                      width: 250,
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
                   ),
-                  TextField(
-                    controller: _password,
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration:
-                        const InputDecoration(hintText: 'Enter your Password'),
+                  Container(
+                    child: const Text(
+                      'Join our community of Best Rent/Sell House ',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: 'Aleo',
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25.0,
+                          color: Colors.black),
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
                   ),
-                  TextButton(
-                      onPressed: () async {
-                        final email = _email.text;
-                        final password = _password.text;
-                        try {
-                          await AuthService.firebase().createUser(
-                            email: email,
-                            password: password,
-                          );
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 16),
+                    child: TextField(
+                      controller: _email,
+                      keyboardType: TextInputType.emailAddress,
+                      obscureText: false,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter your Email'),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 16),
+                    child: TextField(
+                      controller: _password,
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter your Password'),
+                    ),
+                  ),
+                  Container(
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.purple, // background
+                            onPrimary: Colors.white,
+                            padding: EdgeInsets.all(25) // foreground
+                            ),
+                        onPressed: () async {
+                          final email = _email.text;
+                          final password = _password.text;
+                          try {
+                            await AuthService.firebase().createUser(
+                              email: email,
+                              password: password,
+                            );
 
-                          // final UserCredential = await FirebaseAuth.instance
-                          //     .createUserWithEmailAndPassword(
-                          //   email: email,
-                          //   password: password,
-                          // );
-                          AuthService.firebase().sendEmailVerification();
-                          Navigator.of(context).pushNamed(verifyEmailRoute);
-                          //print(UserCredential);
-                        } on WeakPasswordAuthException {
-                          await showErrorDialog(
-                            context,
-                            'Weak Password',
-                          );
-                          devtools.log('The password provided is too weak.');
-                        } on EmailAlreadyInUseAuthException {
-                          await showErrorDialog(
-                            context,
-                            'Email is already in use',
-                          );
-                          devtools.log(
-                              'The account already exists for that email.');
-                        } on InvalidEmailAuthException {
-                          await showErrorDialog(
-                            context,
-                            'Invalid email',
-                          );
-                          devtools.log('invalid email entered');
-                        } on GenericAuthException {
-                          await showErrorDialog(
-                            context,
-                            'Failed to register',
-                          );
-                        }
-                      },
-                      child: const Text('Register')),
+                            // final UserCredential = await FirebaseAuth.instance
+                            //     .createUserWithEmailAndPassword(
+                            //   email: email,
+                            //   password: password,
+                            // );
+                            AuthService.firebase().sendEmailVerification();
+                            Navigator.of(context).pushNamed(verifyEmailRoute);
+                            //print(UserCredential);
+                          } on WeakPasswordAuthException {
+                            await showErrorDialog(
+                              context,
+                              'Weak Password',
+                            );
+                            devtools.log('The password provided is too weak.');
+                          } on EmailAlreadyInUseAuthException {
+                            await showErrorDialog(
+                              context,
+                              'Email is already in use',
+                            );
+                            devtools.log(
+                                'The account already exists for that email.');
+                          } on InvalidEmailAuthException {
+                            await showErrorDialog(
+                              context,
+                              'Invalid email',
+                            );
+                            devtools.log('invalid email entered');
+                          } on GenericAuthException {
+                            await showErrorDialog(
+                              context,
+                              'Failed to register',
+                            );
+                          }
+                        },
+                        child: const Text('Register')),
+                  ),
                   TextButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white, // background
+                        onPrimary: Colors.purple, // foreground
+                      ),
                       onPressed: (() {
                         devtools.log('register button is pressed');
                         Navigator.of(context).pushNamedAndRemoveUntil(

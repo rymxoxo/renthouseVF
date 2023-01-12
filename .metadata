@@ -7,4 +7,8 @@ version:
   revision: c860cba910319332564e1e9d470a17074c1f2dfd
   channel: stable
 
-project_type: app
+project_type: app 
+
+
+
+
