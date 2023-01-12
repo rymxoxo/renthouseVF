@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:house_rent/constants/routes.dart';
 
 import 'package:house_rent/models/house.dart';
 import 'package:house_rent/widgets/about.dart';
@@ -41,12 +42,34 @@ class Details extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: const Text(
-                    'Book Now',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  child: TextButton(
+                    onPressed: () => showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Appatment Marsa'),
+                        content: const Text(
+                            "You can find attached the information of the owner of ths house ,Don't  hesitate to contact him and make a visit to this house."),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                              bookRoute,
+                              (route) => false,
+                            ),
+                            child: const Text('Consult information'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    child: const Text(
+                      'Book Now',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

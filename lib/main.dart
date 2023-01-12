@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:house_rent/constants/routes.dart';
 
 import 'package:house_rent/screens/home/home.dart';
+import 'package:house_rent/screens/profile.dart';
 import 'package:house_rent/screens/registration/SplashScreen.dart';
 import 'package:house_rent/screens/registration/sign_in.dart';
 import 'package:house_rent/screens/registration/sign_up.dart';
 import 'package:house_rent/screens/registration/verify_email.dart';
+import 'package:house_rent/widgets/booknow.dart';
 import 'package:house_rent/widgets/custom_app_bar.dart';
 import 'dart:developer' as devtools show log;
 //we used show because developer package gives yu alot of another function
@@ -39,12 +41,13 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const SignIn(),
+      home: const SplashScreen(),
       routes: {
         homeRoute: (context) => const Home(),
         loginRoute: (context) => const SignIn(),
         registerRoute: (context) => const SignUp(),
-        verifyEmailRoute: (context) => const VerifyEmail()
+        verifyEmailRoute: (context) => const VerifyEmail(),
+        bookRoute: (context) => const Book()
       },
     );
   }

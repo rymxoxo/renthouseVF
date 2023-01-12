@@ -16,11 +16,13 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  late final TextEditingController _name;
   late final TextEditingController _email;
   late final TextEditingController _password;
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized();
+    _name = TextEditingController();
     _email = TextEditingController();
     _password = TextEditingController();
     super.initState();
@@ -28,6 +30,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   void dispose() {
+    _name.dispose();
     _email.dispose();
     _password.dispose();
     // TODO: implement dispose
@@ -72,8 +75,20 @@ class _SignUpState extends State<SignUp> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 18, vertical: 16),
                     child: TextField(
+                      controller: _name,
+                      obscureText: false,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter your Name'),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 16),
+                    child: TextField(
                       controller: _email,
-                      keyboardType: TextInputType.emailAddress,
                       obscureText: false,
                       enableSuggestions: false,
                       autocorrect: false,
@@ -103,10 +118,12 @@ class _SignUpState extends State<SignUp> {
                             padding: EdgeInsets.all(25) // foreground
                             ),
                         onPressed: () async {
+                          final name = _name.text;
                           final email = _email.text;
                           final password = _password.text;
                           try {
                             await AuthService.firebase().createUser(
+                              name: name,
                               email: email,
                               password: password,
                             );
