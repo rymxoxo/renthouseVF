@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:house_rent/constants/routes.dart';
 
 import 'package:house_rent/screens/home/home.dart';
+import 'package:house_rent/screens/registration/SplashScreen.dart';
 import 'package:house_rent/screens/registration/sign_in.dart';
 import 'package:house_rent/screens/registration/sign_up.dart';
 import 'package:house_rent/screens/registration/verify_email.dart';

@@ -43,34 +43,73 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Log In'),
-      ),
       body: FutureBuilder(
         future: AuthService.firebase().initialize(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  TextField(
-                    controller: _email,
-                    keyboardType: TextInputType.emailAddress,
-                    obscureText: false,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration:
-                        const InputDecoration(hintText: 'Enter your Email'),
+                  Container(
+                    child: Image.asset(
+                      'assets/images/welcome.png',
+                      height: 250,
+                      width: 250,
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
                   ),
-                  TextField(
-                    controller: _password,
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration:
-                        const InputDecoration(hintText: 'Enter your Password'),
+                  Container(
+                    child: const Text(
+                      'Welcome among the community of Best Rent/Sell House ',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: 'Aleo',
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25.0,
+                          color: Colors.black),
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
                   ),
-                  TextButton(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 16),
+                    child: TextField(
+                      controller: _email,
+                      keyboardType: TextInputType.emailAddress,
+                      obscureText: false,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter your Email'),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 16),
+                    child: TextField(
+                      controller: _password,
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter your Password'),
+                    ),
+                  ),
+
+                  Container(
+                    margin: const EdgeInsets.only(top: 30.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.purple, // background
+                          onPrimary: Colors.white,
+                          padding: EdgeInsets.all(25) // foreground
+                          ),
                       onPressed: () async {
                         final email = _email.text;
                         final password = _password.text;
@@ -119,17 +158,40 @@ class _SignInState extends State<SignIn> {
                         }
                         //
                       },
-                      child: const Text('Log In')),
-                  TextButton(
-                      onPressed: () {
-                        devtools.log('Login button is pressed');
+                      child: const Text('Log In'),
+                    ),
+                  ),
 
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          registerRoute,
-                          (route) => false,
-                        );
-                      },
-                      child: Text('No registered yet? Register here !'))
+                  // // begin container
+                  // Container(
+                  //   padding: const EdgeInsets.only(top: 222.0),
+                  //   child: ElevatedButton(
+                  //     onPressed: () {},
+                  //     child: Text('Login'),
+                  //     style: ElevatedButton.styleFrom(
+                  //       padding: EdgeInsets.all(50),
+                  //     ),
+                  //   ),
+                  // ),
+                  // //end container(test)
+                  TextButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white, // background
+                      onPrimary: Colors.purple, // foreground
+                    ),
+                    onPressed: () {
+                      devtools.log('Login button is pressed');
+
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        registerRoute,
+                        (route) => false,
+                      );
+                    },
+                    child: const Text(
+                      'No registered yet? Register here !',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
                 ],
               );
             default:
