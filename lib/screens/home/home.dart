@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:house_rent/screens/example.dart';
 import 'package:house_rent/screens/registration/verify_email.dart';
 import 'package:house_rent/services/auth/auth_service.dart';
 
@@ -54,7 +55,7 @@ class Home extends StatelessWidget {
                 return const CircularProgressIndicator();
             }
           }),
-      bottomNavigationBar: CustomBottomNavigationBar(),
+      //bottomNavigationBar: Example(),
     );
   }
 }
