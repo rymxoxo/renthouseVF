@@ -37,7 +37,6 @@ class Details extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  primary: Theme.of(context).primaryColor,
                 ),
                 child: Container(
                   alignment: Alignment.center,

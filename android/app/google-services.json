@@ -40,6 +40,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92960888139:android:352bad3edca8ff11cd04ce",
+        "android_client_info": {
+          "package_name": "com.example.instagram_clone_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92960888139-uskc20q9l98m0olf9gt06jq0gu7j51nt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbeyQYHvmqDE2uDrJbGkhRhj9Ufss7Ex8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92960888139-uskc20q9l98m0olf9gt06jq0gu7j51nt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "92960888139-32h1j9s5aadnoeq40q0i6l42090q68nv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.houseRent"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

@@ -23,7 +23,7 @@ class _ExampleState extends State<Example> {
       'Search',
       style: optionStyle,
     ),
-    Profile()
+    //const Profile()
   ];
 
   @override

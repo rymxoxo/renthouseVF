@@ -1,203 +1,159 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:house_rent/constants/routes.dart';
-import 'package:house_rent/screens/home/home.dart';
-import 'package:house_rent/screens/registration/verify_email.dart';
-import 'package:house_rent/services/auth/auth_exception.dart';
-import 'package:house_rent/services/auth/auth_provider.dart';
-import 'package:house_rent/services/auth/auth_service.dart';
-import 'package:house_rent/utilities/show_error_dialog.dart';
-import 'dart:developer' as devtools show log;
-
-import '../../firebase_options.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:house_rent/resources/auth_methods.dart';
+import 'package:house_rent/responsive/mobile_screen_layout.dart';
+import 'package:house_rent/responsive/responsive_layout.dart';
+import 'package:house_rent/responsive/web_screen_layout.dart';
+import 'package:house_rent/screens/registration/sign_up.dart';
+import 'package:house_rent/utilities/global_variable.dart';
+import 'package:house_rent/utils/utils.dart';
+import 'package:house_rent/widgets/text_field_input.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
 
   @override
-  State<SignIn> createState() => _SignInState();
+  _SignInState createState() => _SignInState();
 }
 
 class _SignInState extends State<SignIn> {
-  late final TextEditingController _email;
-  late final TextEditingController _password;
-  @override
-  void initState() {
-    WidgetsFlutterBinding.ensureInitialized();
-    _email = TextEditingController();
-    _password = TextEditingController();
-    super.initState();
-  }
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
-    _email.dispose();
-    _password.dispose();
-    // TODO: implement dispose
     super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+  }
+
+  void loginUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods().loginUser(
+        email: _emailController.text, password: _passwordController.text);
+    if (res == 'success') {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const ResponsiveLayout(
+              mobileScreenLayout: MobileScreenLayout(),
+              webScreenLayout: WebScreenLayout(),
+            ),
+          ),
+          (route) => false);
+
+      setState(() {
+        _isLoading = false;
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      showSnackBar(context, res);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: AuthService.firebase().initialize(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Container(
+          padding: MediaQuery.of(context).size.width > webScreenSize
+              ? EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width / 3)
+              : const EdgeInsets.symmetric(horizontal: 32),
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Container(),
+                flex: 2,
+              ),
+              Image.asset(
+                'assets/images/welcome.png',
+                height: 250,
+                width: 250,
+              ),
+              const SizedBox(),
+              TextFieldInput(
+                hintText: 'Enter your email',
+                textInputType: TextInputType.emailAddress,
+                textEditingController: _emailController,
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              TextFieldInput(
+                hintText: 'Enter your password',
+                textInputType: TextInputType.text,
+                textEditingController: _passwordController,
+                isPass: true,
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              InkWell(
+                child: Container(
+                  child: !_isLoading
+                      ? const Text(
+                          'Log in',
+                        )
+                      : const CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: const ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                    ),
+                    color: Colors.purple,
+                  ),
+                ),
+                onTap: loginUser,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Flexible(
+                child: Container(),
+                flex: 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    child: Image.asset(
-                      'assets/images/welcome.png',
-                      height: 250,
-                      width: 250,
-                    ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-                  ),
-                  Container(
                     child: const Text(
-                      'Welcome among the community of Best Rent/Sell House ',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: 'Aleo',
-                          fontStyle: FontStyle.normal,
+                      'Dont have an account?',
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SignUp(),
+                      ),
+                    ),
+                    child: Container(
+                      child: const Text(
+                        ' Signup.',
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 25.0,
-                          color: Colors.black),
-                    ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 16),
-                    child: TextField(
-                      controller: _email,
-                      keyboardType: TextInputType.emailAddress,
-                      obscureText: false,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter your Email'),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 16),
-                    child: TextField(
-                      controller: _password,
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter your Password'),
-                    ),
-                  ),
-
-                  Container(
-                    margin: const EdgeInsets.only(top: 30.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.purple, // background
-                          onPrimary: Colors.white,
-                          padding: EdgeInsets.all(25) // foreground
-                          ),
-                      onPressed: () async {
-                        final email = _email.text;
-                        final password = _password.text;
-                        try {
-                          await AuthService.firebase().logIn(
-                            email: email,
-                            password: password,
-                          );
-
-                          devtools.log('done');
-                          final user = AuthService.firebase().currentUser;
-                          if (user?.isEmailVerified ?? false) {
-                            //user is verified
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                              homeRoute,
-                              (route) => false,
-                            );
-                          } else {
-                            //users's email is NOT verifed
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                              verifyEmailRoute,
-                              (route) => false,
-                            );
-                          }
-
-                          //handling firebase exception
-
-                        } on UserNotFoundAuthException catch (e) {
-                          showErrorDialog(
-                            context,
-                            'User not found',
-                          );
-                          devtools.log('No user found for that email.');
-                        } on WrongPasswordAuthException {
-                          showErrorDialog(
-                            context,
-                            'Wrong Password',
-                          );
-                          devtools
-                              .log('Wrong password provided for that user.');
-                        } on GenericAuthException {
-                          showErrorDialog(
-                            context,
-                            'Authentification Error',
-                          );
-                        }
-                        //
-                      },
-                      child: const Text('Log In'),
-                    ),
-                  ),
-
-                  // // begin container
-                  // Container(
-                  //   padding: const EdgeInsets.only(top: 222.0),
-                  //   child: ElevatedButton(
-                  //     onPressed: () {},
-                  //     child: Text('Login'),
-                  //     style: ElevatedButton.styleFrom(
-                  //       padding: EdgeInsets.all(50),
-                  //     ),
-                  //   ),
-                  // ),
-                  // //end container(test)
-                  TextButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white, // background
-                      onPrimary: Colors.purple, // foreground
-                    ),
-                    onPressed: () {
-                      devtools.log('Login button is pressed');
-
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        registerRoute,
-                        (route) => false,
-                      );
-                    },
-                    child: const Text(
-                      'No registered yet? Register here !',
-                      style: TextStyle(fontSize: 14),
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
                   ),
                 ],
-              );
-            default:
-              return const Text('Loading...');
-          }
-        },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

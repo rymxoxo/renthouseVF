@@ -44,7 +44,7 @@ class SplashScreen extends StatelessWidget {
       duration: 3000,
       splashTransition: SplashTransition.fadeTransition,
       pageTransitionType: PageTransitionType.leftToRightWithFade,
-      animationDuration: const Duration(seconds: 1),
+      animationDuration: const Duration(seconds: 2),
     );
   }
 }

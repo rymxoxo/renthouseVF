@@ -1,188 +1,220 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:house_rent/constants/routes.dart';
-import 'package:house_rent/services/auth/auth_exception.dart';
-import 'package:house_rent/services/auth/auth_service.dart';
-import 'package:house_rent/utilities/show_error_dialog.dart';
-
-import '../../firebase_options.dart';
-import 'dart:developer' as devtools show log;
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:house_rent/resources/auth_methods.dart';
+import 'package:house_rent/responsive/mobile_screen_layout.dart';
+import 'package:house_rent/responsive/responsive_layout.dart';
+import 'package:house_rent/responsive/web_screen_layout.dart';
+import 'package:house_rent/screens/registration/sign_in.dart';
+import 'package:house_rent/utilities/colors.dart';
+import 'package:house_rent/utils/utils.dart';
+import 'package:house_rent/widgets/text_field_input.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  _SignUpState createState() => _SignUpState();
 }
 
 class _SignUpState extends State<SignUp> {
-  late final TextEditingController _name;
-  late final TextEditingController _email;
-  late final TextEditingController _password;
-  @override
-  void initState() {
-    WidgetsFlutterBinding.ensureInitialized();
-    _name = TextEditingController();
-    _email = TextEditingController();
-    _password = TextEditingController();
-    super.initState();
-  }
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _bioController = TextEditingController();
+  bool _isLoading = false;
+  Uint8List? _image;
 
   @override
   void dispose() {
-    _name.dispose();
-    _email.dispose();
-    _password.dispose();
-    // TODO: implement dispose
     super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _usernameController.dispose();
+  }
+
+  void signUpUser() async {
+    // set loading to true
+    setState(() {
+      _isLoading = true;
+    });
+
+    // signup user using our authmethodds
+    String res = await AuthMethods().signUpUser(
+        email: _emailController.text,
+        password: _passwordController.text,
+        username: _usernameController.text,
+        bio: _bioController.text,
+        file: _image!);
+    print(res);
+    // if string returned is sucess, user has been created
+    if (res == "success") {
+      setState(() {
+        _isLoading = false;
+      });
+      // navigate to the home screen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+            mobileScreenLayout: MobileScreenLayout(),
+            webScreenLayout: WebScreenLayout(),
+          ),
+        ),
+      );
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      // show the error
+      showSnackBar(context, res);
+    }
+  }
+
+  selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: AuthService.firebase().initialize(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Container(),
+                flex: 2,
+              ),
+              const SizedBox(
+                height: 64,
+              ),
+              Stack(
+                children: [
+                  _image != null
+                      ? CircleAvatar(
+                          radius: 64,
+                          backgroundImage: MemoryImage(_image!),
+                          backgroundColor: Colors.red,
+                        )
+                      : const CircleAvatar(
+                          radius: 64,
+                          backgroundImage: NetworkImage(
+                              'https://i.stack.imgur.com/l60Hf.png'),
+                          backgroundColor: Colors.purple,
+                        ),
+                  Positioned(
+                    bottom: -10,
+                    left: 80,
+                    child: IconButton(
+                      onPressed: selectImage,
+                      icon: const Icon(Icons.add_a_photo),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              TextFieldInput(
+                hintText: 'Enter your username',
+                textInputType: TextInputType.text,
+                textEditingController: _usernameController,
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              TextFieldInput(
+                hintText: 'Enter your email',
+                textInputType: TextInputType.emailAddress,
+                textEditingController: _emailController,
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              TextFieldInput(
+                hintText: 'Enter your password',
+                textInputType: TextInputType.text,
+                textEditingController: _passwordController,
+                isPass: true,
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              TextFieldInput(
+                hintText: 'Enter your profesion',
+                textInputType: TextInputType.text,
+                textEditingController: _bioController,
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              InkWell(
+                child: Container(
+                  child: !_isLoading
+                      ? const Text(
+                          'Sign up',
+                        )
+                      : const CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: const ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                    ),
+                    color: Colors.purple,
+                  ),
+                ),
+                onTap: signUpUser,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Flexible(
+                child: Container(),
+                flex: 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    child: Image.asset(
-                      'assets/images/welcome.png',
-                      height: 250,
-                      width: 250,
-                    ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-                  ),
-                  Container(
                     child: const Text(
-                      'Join our community of Best Rent/Sell House ',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: 'Aleo',
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25.0,
-                          color: Colors.black),
+                      'Already have an account?',
                     ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 16),
-                    child: TextField(
-                      controller: _name,
-                      obscureText: false,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter your Name'),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 16),
-                    child: TextField(
-                      controller: _email,
-                      obscureText: false,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter your Email'),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 16),
-                    child: TextField(
-                      controller: _password,
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter your Password'),
-                    ),
-                  ),
-                  Container(
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.purple, // background
-                            onPrimary: Colors.white,
-                            padding: EdgeInsets.all(25) // foreground
-                            ),
-                        onPressed: () async {
-                          final name = _name.text;
-                          final email = _email.text;
-                          final password = _password.text;
-                          try {
-                            await AuthService.firebase().createUser(
-                              name: name,
-                              email: email,
-                              password: password,
-                            );
-
-                            // final UserCredential = await FirebaseAuth.instance
-                            //     .createUserWithEmailAndPassword(
-                            //   email: email,
-                            //   password: password,
-                            // );
-                            AuthService.firebase().sendEmailVerification();
-                            Navigator.of(context).pushNamed(verifyEmailRoute);
-                            //print(UserCredential);
-                          } on WeakPasswordAuthException {
-                            await showErrorDialog(
-                              context,
-                              'Weak Password',
-                            );
-                            devtools.log('The password provided is too weak.');
-                          } on EmailAlreadyInUseAuthException {
-                            await showErrorDialog(
-                              context,
-                              'Email is already in use',
-                            );
-                            devtools.log(
-                                'The account already exists for that email.');
-                          } on InvalidEmailAuthException {
-                            await showErrorDialog(
-                              context,
-                              'Invalid email',
-                            );
-                            devtools.log('invalid email entered');
-                          } on GenericAuthException {
-                            await showErrorDialog(
-                              context,
-                              'Failed to register',
-                            );
-                          }
-                        },
-                        child: const Text('Register')),
-                  ),
-                  TextButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.white, // background
-                        onPrimary: Colors.purple, // foreground
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SignIn(),
                       ),
-                      onPressed: (() {
-                        devtools.log('register button is pressed');
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          loginRoute,
-                          (route) => false,
-                        );
-                      }),
-                      child: const Text('Already Registered ? Login here!'))
+                    ),
+                    child: Container(
+                      child: const Text(
+                        ' Login.',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                    ),
+                  ),
                 ],
-              );
-            default:
-              return const Text('Loading...');
-          }
-        },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

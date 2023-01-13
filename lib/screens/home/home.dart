@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:house_rent/screens/example.dart';
+import 'package:house_rent/screens/feed_screen.dart';
 import 'package:house_rent/screens/registration/verify_email.dart';
 import 'package:house_rent/services/auth/auth_service.dart';
 
@@ -22,7 +23,6 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
       appBar: const CustomAppBar(),
       body: FutureBuilder(
           future: AuthService.firebase().initialize(),

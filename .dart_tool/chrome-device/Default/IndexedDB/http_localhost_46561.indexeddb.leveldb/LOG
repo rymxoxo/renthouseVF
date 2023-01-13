@@ -1,0 +1,26 @@
+2023/01/12-23:31:24.798 9cfd Reusing MANIFEST /tmp/flutter_tools.BQTMMG/flutter_tools_chrome_device.ZEULEW/Default/IndexedDB/http_localhost_46561.indexeddb.leveldb/MANIFEST-000001
+2023/01/12-23:31:24.798 9cfd Recovering log #4
+2023/01/12-23:31:24.798 9cfd Reusing old log /tmp/flutter_tools.BQTMMG/flutter_tools_chrome_device.ZEULEW/Default/IndexedDB/http_localhost_46561.indexeddb.leveldb/000004.log 
+2023/01/12-23:31:24.897 a322 Level-0 table #8: started
+2023/01/12-23:31:24.905 a322 Level-0 table #8: 1879 bytes OK
+2023/01/12-23:31:24.930 a322 Delete type=0 #4
+2023/01/12-23:31:24.930 a322 Manual compaction at level-0 from '\x00\x04\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x05\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/01/12-23:34:19.734 a4cf Level-0 table #10: started
+2023/01/12-23:34:19.739 a4cf Level-0 table #10: 373 bytes OK
+2023/01/12-23:34:19.747 a4cf Delete type=0 #7
+2023/01/12-23:34:19.747 a4cf Manual compaction at level-0 from (begin) .. (end); will stop at '\x00\x02\x01\x02\x01\x05\x00_\x00_\x00s\x00a\x00k' @ 151 : 1
+2023/01/12-23:34:19.747 a4cf Compacting 1@0 + 1@1 files
+2023/01/12-23:34:19.754 a4cf Generated table #11@0: 48 keys, 1342 bytes
+2023/01/12-23:34:19.754 a4cf Compacted 1@0 + 1@1 files => 1342 bytes
+2023/01/12-23:34:19.761 a4cf compacted to: files[ 0 1 1 0 0 0 0 ]
+2023/01/12-23:34:19.761 a4cf Delete type=2 #10
+2023/01/12-23:34:19.761 a4cf Delete type=2 #8
+2023/01/12-23:34:19.762 a4cf Manual compaction at level-0 from '\x00\x02\x01\x02\x01\x05\x00_\x00_\x00s\x00a\x00k' @ 151 : 1 .. (end); will stop at (end)
+2023/01/12-23:34:19.762 a4cf Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x03\x01\x02\x012\x00[\x00D\x00E\x00F\x00A\x00U\x00L\x00T\x00]\x00!\x001\x00:\x009\x002\x009\x006\x000\x008\x008\x008\x001\x003\x009\x00:\x00w\x00e\x00b\x00:\x00d\x00d\x002\x008\x00b\x00b\x005\x00f\x002\x000\x006\x008\x00c\x003\x00a\x007\x00c\x00d\x000\x004\x00c\x00e' @ 122 : 1
+2023/01/12-23:34:19.762 a4cf Compacting 1@1 + 1@2 files
+2023/01/12-23:34:19.769 a4cf Generated table #12@1: 34 keys, 1193 bytes
+2023/01/12-23:34:19.769 a4cf Compacted 1@1 + 1@2 files => 1193 bytes
+2023/01/12-23:34:19.776 a4cf compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/01/12-23:34:19.776 a4cf Delete type=2 #5
+2023/01/12-23:34:19.776 a4cf Delete type=2 #11
+2023/01/12-23:34:19.777 a4cf Manual compaction at level-1 from '\x00\x03\x01\x02\x012\x00[\x00D\x00E\x00F\x00A\x00U\x00L\x00T\x00]\x00!\x001\x00:\x009\x002\x009\x006\x000\x008\x008\x008\x001\x003\x009\x00:\x00w\x00e\x00b\x00:\x00d\x00d\x002\x008\x00b\x00b\x005\x00f\x002\x000\x006\x008\x00c\x003\x00a\x007\x00c\x00d\x000\x004\x00c\x00e' @ 122 : 1 .. (end); will stop at (end)
